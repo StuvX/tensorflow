@@ -123,6 +123,16 @@ Status ExpGrad(const AttrSlice& attrs, FunctionDef* g) {
 }
 REGISTER_OP_GRADIENT("Exp", ExpGrad);
 
+Status Expm1Grad(const AttrSlice& attrs, FunctionDef* g) {
+  // clang-format off
+  return GradForUnaryCwise(g, {
+      {{"y"}, "Exp", {"x"}},
+      {{"dx"}, "Mul", {"dy", "y"}},           // dy * y
+  });
+  // clang-format on
+}
+REGISTER_OP_GRADIENT("Expm1", Expm1Grad);
+
 Status LogGrad(const AttrSlice& attrs, FunctionDef* g) {
   // clang-format off
   return GradForUnaryCwise(g, {
@@ -132,6 +142,18 @@ Status LogGrad(const AttrSlice& attrs, FunctionDef* g) {
   // clang-format on
 }
 REGISTER_OP_GRADIENT("Log", LogGrad);
+
+Status Log1pGrad(const AttrSlice& attrs, FunctionDef* g) {
+  // clang-format off
+  return GradForUnaryCwise(g, {
+      FDH::Const("const", 1.0f),
+      {{"one"}, "Cast", {"const"}, {{"SrcT", DT_FLOAT}, {"DstT", "$T"}}},
+      {{"a"}, "Add", {"one", "x"}},
+      {{"dx"}, "Div", {"dy", "a"}},           // dy / (1 + x)
+  });
+  // clang-format on
+}
+REGISTER_OP_GRADIENT("Log1p", Log1pGrad);
 
 Status TanhGrad(const AttrSlice& attrs, FunctionDef* g) {
   // clang-format off

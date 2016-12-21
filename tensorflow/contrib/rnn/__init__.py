@@ -12,9 +12,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
-"""Additional RNN operations and cells.
+"""Module for constructing RNN Cells and additional RNN operations.
 
-## This package provides additional contributed RNNCells.
+## Base interface for all RNN Cells
+
+@@RNNCell
+
+## RNN Cells for use with TensorFlow's core RNN methods
+
+@@BasicRNNCell
+@@BasicLSTMCell
+@@GRUCell
+@@LSTMCell
+
+## Classes storing split `RNNCell` state
+
+@@LSTMStateTuple
+
+## RNN Cell wrappers (RNNCells that wrap other RNNCells)
+
+@@MultiRNNCell
+@@DropoutWrapper
+@@EmbeddingWrapper
+@@InputProjectionWrapper
+@@OutputProjectionWrapper
 
 ### Block RNNCells
 @@LSTMBlockCell
@@ -33,11 +54,25 @@
 
 ### RNNCell wrappers
 @@AttentionCellWrapper
+
+
+## Recurrent Neural Networks
+
+TensorFlow provides a number of methods for constructing Recurrent Neural
+Networks.
+
+@@static_rnn
+@@static_state_saving_rnn
+@@static_bidirectional_rnn
 """
 
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+
+from tensorflow.contrib.rnn.python.ops.core_rnn import static_bidirectional_rnn
+from tensorflow.contrib.rnn.python.ops.core_rnn import static_rnn
+from tensorflow.contrib.rnn.python.ops.core_rnn import static_state_saving_rnn
 
 # pylint: disable=unused-import,wildcard-import, line-too-long
 from tensorflow.contrib.rnn.python.ops.fused_rnn_cell import *
@@ -46,3 +81,17 @@ from tensorflow.contrib.rnn.python.ops.lstm_ops import *
 from tensorflow.contrib.rnn.python.ops.rnn import *
 from tensorflow.contrib.rnn.python.ops.rnn_cell import *
 # pylint: enable=unused-import,wildcard-import,line-too-long
+
+# Provides the links to core rnn and rnn_cell. Implementation will be moved in
+# to this package instead of links as tracked in b/33235120.
+from tensorflow.python.ops.rnn_cell import BasicLSTMCell
+from tensorflow.python.ops.rnn_cell import BasicRNNCell
+from tensorflow.python.ops.rnn_cell import DropoutWrapper
+from tensorflow.python.ops.rnn_cell import EmbeddingWrapper
+from tensorflow.python.ops.rnn_cell import GRUCell
+from tensorflow.python.ops.rnn_cell import InputProjectionWrapper
+from tensorflow.python.ops.rnn_cell import LSTMCell
+from tensorflow.python.ops.rnn_cell import LSTMStateTuple
+from tensorflow.python.ops.rnn_cell import MultiRNNCell
+from tensorflow.python.ops.rnn_cell import OutputProjectionWrapper
+from tensorflow.python.ops.rnn_cell import RNNCell
